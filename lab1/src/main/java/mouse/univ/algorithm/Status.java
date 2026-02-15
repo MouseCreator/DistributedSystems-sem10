@@ -1,4 +1,4 @@
-package mouse.univ;
+package mouse.univ.algorithm;
 
 public enum Status {
     UNKNOWN, LEADER

@@ -1,6 +1,7 @@
 package mouse.univ;
 
 import lombok.Getter;
+import mouse.univ.algorithm.Status;
 
 @Getter
 public class State {

@@ -1,5 +1,7 @@
 package mouse.univ;
 
+import mouse.univ.algorithm.Status;
+
 public class Transition {
 
     public static void transition(State state, int sender, Message message) {
