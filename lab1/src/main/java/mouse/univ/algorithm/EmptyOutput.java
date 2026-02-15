@@ -1,6 +1,4 @@
-package mouse.univ.algorithm.lcr;
-
-import mouse.univ.algorithm.Output;
+package mouse.univ.algorithm;
 
 public class EmptyOutput implements Output {
     @Override
