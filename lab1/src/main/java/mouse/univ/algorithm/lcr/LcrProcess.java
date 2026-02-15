@@ -1,11 +1,13 @@
 package mouse.univ.algorithm.lcr;
 
+import lombok.extern.log4j.Log4j2;
 import mouse.univ.algorithm.AlgorithmMetadata;
 import mouse.univ.algorithm.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class LcrProcess extends Thread {
     private final List<LcrState> states;
     private final LcrController controller;
@@ -21,22 +23,28 @@ public class LcrProcess extends Thread {
     }
 
     public void run() {
-        if (controller.finished()) {
-            LcrState state = states.getLast();
-            if (state.getStatus() == Status.LEADER) {
-                AlgorithmMetadata metadata = controller.getMetadata();
-                output.write("Process " + state.getUid() + " is elected a leader.");
-                output.write("Total processes: " + metadata.getProcesses());
-                output.write("Total rounds: " + metadata.getRounds());
-                output.write("Total messages: " + metadata.getMessages());
+        LcrState state = states.getLast();
+        log.info("{} started!", state.getUid());
+        while (true) {
+            if (controller.finished()) {
+                if (state.getStatus() == Status.LEADER) {
+                    AlgorithmMetadata metadata = controller.getMetadata();
+                    output.write("Process " + state.getUid() + " is elected a leader.");
+                    output.write("Total processes: " + metadata.getProcesses());
+                    output.write("Total rounds: " + metadata.getRounds());
+                    output.write("Total messages: " + metadata.getMessages());
+                }
+                return;
             }
-            return;
+            log.info("{} awaits to send", state.getUid());
+            controller.await();
+            sendMessage();
+            log.info("{} awaits to receive", state.getUid());
+            controller.await();
+            receiveMessage();
+            log.info("{} awaits to check", state.getUid());
+            controller.await();
         }
-        controller.await();
-        sendMessage();
-        controller.await();
-        receiveMessage();
-        controller.await();
     }
 
     private void sendMessage() {

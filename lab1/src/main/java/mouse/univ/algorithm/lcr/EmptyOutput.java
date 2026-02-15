@@ -1,8 +1,7 @@
 package mouse.univ.algorithm.lcr;
 
-public class ConsoleOutput implements Output {
+public class EmptyOutput implements Output {
     @Override
     public void write(String message) {
-        System.out.println(message);
     }
 }

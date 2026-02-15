@@ -6,8 +6,12 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class AlgorithmMetadata {
-    private long leader;
-    private int processes;
-    private int messages;
-    private int rounds;
+    private Long leader;
+    private Integer processes;
+    private Integer messages;
+    private Integer rounds;
+
+    public boolean hasLeader() {
+        return leader != null;
+    }
 }
