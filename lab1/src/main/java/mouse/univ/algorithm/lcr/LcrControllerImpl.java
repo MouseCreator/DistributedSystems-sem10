@@ -21,8 +21,7 @@ public class LcrControllerImpl implements LcrController {
     private final AtomicInteger totalRounds;
     private final int totalProcesses;
     private final AtomicLong leader;
-
-    private AtomicInteger roundDecrement;
+    private final AtomicInteger roundDecrement;
 
     public LcrControllerImpl(List<Long> uids) {
         recordedMessages = new ConcurrentHashMap<>();

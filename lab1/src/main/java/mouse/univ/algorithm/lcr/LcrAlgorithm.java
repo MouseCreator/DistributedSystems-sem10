@@ -1,5 +1,7 @@
 package mouse.univ.algorithm.lcr;
 
+import mouse.univ.algorithm.Output;
+
 import java.util.ArrayList;
 import java.util.List;
 

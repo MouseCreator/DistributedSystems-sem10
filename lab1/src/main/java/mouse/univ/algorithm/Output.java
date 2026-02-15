@@ -1,4 +1,4 @@
-package mouse.univ.algorithm.lcr;
+package mouse.univ.algorithm;
 
 public interface Output {
     void write(String message);

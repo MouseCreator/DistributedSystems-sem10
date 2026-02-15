@@ -1,6 +1,8 @@
 package mouse.univ.algorithm.lcr;
 
 import mouse.univ.algorithm.AlgorithmMetadata;
+import mouse.univ.algorithm.ConsoleOutput;
+import mouse.univ.algorithm.Output;
 import mouse.univ.algorithm.Stopwatch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

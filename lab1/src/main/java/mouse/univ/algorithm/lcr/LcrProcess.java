@@ -2,6 +2,7 @@ package mouse.univ.algorithm.lcr;
 
 import lombok.extern.log4j.Log4j2;
 import mouse.univ.algorithm.AlgorithmMetadata;
+import mouse.univ.algorithm.Output;
 import mouse.univ.algorithm.Status;
 
 import java.util.ArrayList;
