@@ -5,31 +5,29 @@ import mouse.univ.algorithm.AlgorithmMetadata;
 import mouse.univ.algorithm.Output;
 import mouse.univ.algorithm.Status;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Log4j2
 public class LcrProcess extends Thread {
-    private final List<LcrState> states;
+    private LcrState state;
     private final LcrController controller;
     private final Output output;
     private final Long neighborUid;
 
     public LcrProcess(LcrState state, Long neighborUid, LcrController controller, Output output) {
-        states = new ArrayList<>();
-        states.add(state);
+        this.state = state;
         this.controller = controller;
         this.output = output;
         this.neighborUid = neighborUid;
     }
 
+    @Override
     public void run() {
-        LcrState state = states.getLast();
         log.info("{} started!", state.getUid());
         while (true) {
             controller.startRound();
             if (controller.finished()) {
-                state = states.getLast();
                 if (state.getStatus() == Status.LEADER) {
                     AlgorithmMetadata metadata = controller.getMetadata();
                     output.write("Process " + state.getUid() + " is elected a leader.");
@@ -51,18 +49,16 @@ public class LcrProcess extends Thread {
     }
 
     private void sendMessage() {
-        LcrState current = states.getLast();
-        if (current.getSend() == null) {
+        if (state.getSend() == null) {
             return;
         }
-        LcrMessage lcrMessage = new LcrMessage(current.getSend());
+        LcrMessage lcrMessage = new LcrMessage(state.getSend());
         controller.send(neighborUid, lcrMessage);
     }
 
     private void receiveMessage() {
-        LcrState current = states.getLast();
-        Long uid = current.getUid();
-        Status status = current.getStatus();
+        Long uid = state.getUid();
+        Status status = state.getStatus();
 
         List<LcrMessage> lcrMessages = controller.receiveMessages(uid);
 
@@ -83,7 +79,7 @@ public class LcrProcess extends Thread {
             controller.notifyLeaderFound(uid);
         }
 
-        states.addLast(new LcrState(uid, send, status));
+        state = new LcrState(uid, send, status);
     }
 
 }
