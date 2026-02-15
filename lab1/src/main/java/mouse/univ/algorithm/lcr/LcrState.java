@@ -6,8 +6,8 @@ import mouse.univ.algorithm.Status;
 @Data
 public class LcrState {
     private final Long uid;
-    private Long send;
-    private Status status;
+    private final Long send;
+    private final Status status;
 
     public LcrState(Long uid) {
         this.uid = uid;

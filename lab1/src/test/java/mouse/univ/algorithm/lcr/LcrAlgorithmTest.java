@@ -76,4 +76,16 @@ class LcrAlgorithmTest {
         testRun(reversed);
     }
 
+    @Test
+    void testUidsDoesNotMatter() {
+        List<Long> hardcoded = List.of(105L, 1000L, 2L, 88L);
+        testRun(hardcoded);
+    }
+
+    @Test
+    void testWorksOnOne() {
+        List<Long> hardcoded = List.of(35L);
+        testRun(hardcoded);
+    }
+
 }
