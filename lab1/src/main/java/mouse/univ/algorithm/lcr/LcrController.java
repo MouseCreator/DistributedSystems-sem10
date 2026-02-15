@@ -11,4 +11,5 @@ public interface LcrController {
     boolean finished();
     void notifyLeaderFound(Long uid);
     AlgorithmMetadata getMetadata();
+    void startRound();
 }

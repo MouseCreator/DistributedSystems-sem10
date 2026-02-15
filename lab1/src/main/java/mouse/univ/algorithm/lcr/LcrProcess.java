@@ -26,7 +26,9 @@ public class LcrProcess extends Thread {
         LcrState state = states.getLast();
         log.info("{} started!", state.getUid());
         while (true) {
+            controller.startRound();
             if (controller.finished()) {
+                state = states.getLast();
                 if (state.getStatus() == Status.LEADER) {
                     AlgorithmMetadata metadata = controller.getMetadata();
                     output.write("Process " + state.getUid() + " is elected a leader.");

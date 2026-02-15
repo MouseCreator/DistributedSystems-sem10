@@ -22,6 +22,8 @@ public class LcrControllerImpl implements LcrController {
     private final int totalProcesses;
     private final AtomicLong leader;
 
+    private AtomicInteger roundDecrement;
+
     public LcrControllerImpl(List<Long> uids) {
         recordedMessages = new ConcurrentHashMap<>();
         for (Long uid : uids) {
@@ -32,6 +34,7 @@ public class LcrControllerImpl implements LcrController {
         totalMessagesSent = new AtomicInteger(0);
         totalRounds = new AtomicInteger(0);
         leader = new AtomicLong(-1L);
+        roundDecrement = new AtomicInteger(totalProcesses);
     }
 
     @Override
@@ -73,5 +76,15 @@ public class LcrControllerImpl implements LcrController {
     @Override
     public AlgorithmMetadata getMetadata() {
         return new AlgorithmMetadata(leader.get(), totalProcesses, totalMessagesSent.get(), totalRounds.get());
+    }
+
+    @Override
+    public void startRound() {
+        if (roundDecrement.get() == 1) {
+            roundDecrement.set(totalProcesses);
+            totalRounds.incrementAndGet();
+        } else {
+            roundDecrement.decrementAndGet();
+        }
     }
 }

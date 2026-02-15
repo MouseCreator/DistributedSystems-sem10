@@ -1,6 +1,7 @@
 package mouse.univ.algorithm.lcr;
 
 import mouse.univ.algorithm.AlgorithmMetadata;
+import mouse.univ.algorithm.Stopwatch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -8,7 +9,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,33 +32,46 @@ class LcrAlgorithmTest {
         return uids.stream().mapToLong(t->t).max().orElseThrow();
     }
 
-    @Test
-    void testRunsOnThree() {
-        List<Long> uids = generateShuffledUids(3);
+    private void testRun(List<Long> uids) {
         Long maxUid = maxUid(uids);
 
         LcrController controller = new LcrControllerImpl(uids);
         LcrAlgorithm algorithm = new LcrAlgorithm(controller, uids, output);
-        algorithm.start();
+        Stopwatch.measure(algorithm::start);
         AlgorithmMetadata metadata = controller.getMetadata();
 
         assertTrue(metadata.hasLeader());
         assertEquals(maxUid, metadata.getLeader());
     }
 
+    @Test
+    void testRunsOnThree() {
+        testRun(generateShuffledUids(3));
+    }
+
     @ParameterizedTest
     @ValueSource(ints = {5, 8, 10, 15, 20})
     void testRunsOnLargerValues(int processes) {
-        List<Long> uids = generateShuffledUids(processes);
-        Long maxUid = maxUid(uids);
+        testRun(generateShuffledUids(processes));
+    }
 
-        LcrController controller = new LcrControllerImpl(uids);
-        LcrAlgorithm algorithm = new LcrAlgorithm(controller, uids, output);
-        algorithm.start();
-        AlgorithmMetadata metadata = controller.getMetadata();
+    @ParameterizedTest
+    @ValueSource(ints = {100, 200, 500})
+    void testRunsOnEvenLargerValues(int processes) {
+        testRun(generateShuffledUids(processes));
+    }
 
-        assertTrue(metadata.hasLeader());
-        assertEquals(maxUid, metadata.getLeader());
+    @Test
+    void testRunsWithStraightList() {
+        List<Long> longs = generateUids(100);
+        testRun(longs);
+    }
+
+    @Test
+    void testRunsWithReversedList() {
+        List<Long> longs = generateUids(100);
+        List<Long> reversed = longs.reversed();
+        testRun(reversed);
     }
 
 }
