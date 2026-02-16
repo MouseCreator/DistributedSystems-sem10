@@ -76,4 +76,11 @@ class HSAlgorithmTest {
         List<Long> hardcoded = List.of(35L);
         testRun(hardcoded);
     }
+
+    @Test
+    void testThrowsOnInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new HSControllerImpl(List.of(1L,1L,2L,3L)));
+        assertThrows(IllegalArgumentException.class, () -> new HSControllerImpl(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> new HSControllerImpl(List.of(1L, 2L, -1L)));
+    }
 }

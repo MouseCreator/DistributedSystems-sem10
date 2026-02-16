@@ -28,13 +28,7 @@ public class LcrProcess extends Thread {
         while (true) {
             controller.startRound();
             if (controller.finished()) {
-                if (state.getStatus() == Status.LEADER) {
-                    AlgorithmMetadata metadata = controller.getMetadata();
-                    output.write("Process " + state.getUid() + " is elected a leader.");
-                    output.write("Total processes: " + metadata.getProcesses());
-                    output.write("Total rounds: " + metadata.getRounds());
-                    output.write("Total messages: " + metadata.getMessages());
-                }
+                notifyFinished();
                 return;
             }
             log.info("{} awaits to send", state.getUid());
@@ -48,12 +42,21 @@ public class LcrProcess extends Thread {
         }
     }
 
+    private void notifyFinished() {
+        if (state.getStatus() == Status.LEADER) {
+            AlgorithmMetadata metadata = controller.getMetadata();
+            output.write("Process " + state.getUid() + " is elected a leader.");
+            output.write("Total processes: " + metadata.getProcesses());
+            output.write("Total rounds: " + metadata.getRounds());
+            output.write("Total messages: " + metadata.getMessages());
+        }
+    }
+
     private void sendMessage() {
         if (state.getSend() == null) {
             return;
         }
-        LcrMessage lcrMessage = new LcrMessage(state.getSend());
-        controller.send(neighborUid, lcrMessage);
+        controller.send(neighborUid, state.getSend());
     }
 
     private void receiveMessage() {
@@ -79,7 +82,7 @@ public class LcrProcess extends Thread {
             controller.notifyLeaderFound(uid);
         }
 
-        state = new LcrState(uid, send, status);
+        state = new LcrState(uid, new LcrMessage(send), status);
     }
 
 }

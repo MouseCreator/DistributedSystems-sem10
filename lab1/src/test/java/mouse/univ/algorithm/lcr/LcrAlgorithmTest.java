@@ -78,4 +78,11 @@ class LcrAlgorithmTest {
         testRun(hardcoded);
     }
 
+    @Test
+    void testThrowsOnInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new LcrControllerImpl(List.of(1L,1L,2L,3L)));
+        assertThrows(IllegalArgumentException.class, () -> new LcrControllerImpl(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> new LcrControllerImpl(List.of(1L, 2L, -1L)));
+    }
+
 }

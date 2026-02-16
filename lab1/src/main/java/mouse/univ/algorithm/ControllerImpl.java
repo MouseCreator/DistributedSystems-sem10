@@ -1,5 +1,6 @@
 package mouse.univ.algorithm;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BrokenBarrierException;
@@ -26,6 +27,15 @@ public class ControllerImpl<T> implements Controller<T> {
         recordedMessages = new ConcurrentHashMap<>();
         for (Long uid : uids) {
             recordedMessages.put(uid, new ArrayList<>());
+        }
+        if (uids.isEmpty()) {
+            throw new IllegalArgumentException("UIDs cannot be empty");
+        }
+        if (new HashSet<>(uids).size() < uids.size()) {
+            throw new IllegalArgumentException("UIDs must be unique");
+        }
+        if (uids.stream().anyMatch(u -> u.equals(-1L))) {
+            throw new IllegalArgumentException("UID cannot be equal to -1");
         }
         totalProcesses = uids.size();
         this.barrier = new CyclicBarrier(totalProcesses);

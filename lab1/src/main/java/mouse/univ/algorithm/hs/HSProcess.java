@@ -32,13 +32,7 @@ public class HSProcess extends Thread{
         while (true) {
             controller.startRound();
             if (controller.finished()) {
-                if (state.getStatus() == Status.LEADER) {
-                    AlgorithmMetadata metadata = controller.getMetadata();
-                    output.write("Process " + state.getUid() + " is elected a leader.");
-                    output.write("Total processes: " + metadata.getProcesses());
-                    output.write("Total rounds: " + metadata.getRounds());
-                    output.write("Total messages: " + metadata.getMessages());
-                }
+                notifyFinished();
                 return;
             }
             log.info("{} awaits to send", state.getUid());
@@ -49,6 +43,16 @@ public class HSProcess extends Thread{
             receiveMessage();
             log.info("{} awaits to check", state.getUid());
             controller.await();
+        }
+    }
+
+    private void notifyFinished() {
+        if (state.getStatus() == Status.LEADER) {
+            AlgorithmMetadata metadata = controller.getMetadata();
+            output.write("Process " + state.getUid() + " is elected a leader.");
+            output.write("Total processes: " + metadata.getProcesses());
+            output.write("Total rounds: " + metadata.getRounds());
+            output.write("Total messages: " + metadata.getMessages());
         }
     }
 
