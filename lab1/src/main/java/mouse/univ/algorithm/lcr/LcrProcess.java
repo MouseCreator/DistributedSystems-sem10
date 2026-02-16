@@ -82,7 +82,7 @@ public class LcrProcess extends Thread {
             controller.notifyLeaderFound(uid);
         }
 
-        state = new LcrState(uid, new LcrMessage(send), status);
+        state = new LcrState(uid, send == null ? null : new LcrMessage(send), status);
     }
 
 }
