@@ -1,44 +1,25 @@
 package mouse.univ.algorithm.hs;
 
 import mouse.univ.algorithm.AlgorithmMetadata;
-import mouse.univ.algorithm.ConsoleOutput;
-import mouse.univ.algorithm.Output;
 import mouse.univ.algorithm.Stopwatch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static mouse.univ.algorithm.GlobalTestConfig.*;
 
 class HSAlgorithmTest {
 
-    private static final Output output = new ConsoleOutput();
-
-    private List<Long> generateUids(int number) {
-        List<Long> result = new ArrayList<>();
-        for (long i = 0; i < number; i++) {
-            result.add(i);
-        }
-        return result;
-    }
-    private List<Long> generateShuffledUids(int number) {
-        List<Long> uids = generateUids(number);
-        Collections.shuffle(uids);
-        return uids;
-    }
-    private Long maxUid(List<Long> uids) {
-        return uids.stream().mapToLong(t->t).max().orElseThrow();
-    }
-
     private void testRun(List<Long> uids) {
         Long maxUid = maxUid(uids);
-        System.out.println("Process order:" + uids);
+        if (PRINT_ORDER) {
+            System.out.println("Process order:" + uids);
+        }
         HSController controller = new HSControllerImpl(uids);
-        HSAlgorithm algorithm = new HSAlgorithm(controller, uids, output);
+        HSAlgorithm algorithm = new HSAlgorithm(controller, uids, OUTPUT);
         Stopwatch.measure(algorithm::start);
         AlgorithmMetadata metadata = controller.getMetadata();
 

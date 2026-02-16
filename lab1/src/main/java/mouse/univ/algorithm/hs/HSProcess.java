@@ -24,7 +24,6 @@ public class HSProcess extends Thread{
         this.output = output;
         this.neighborUidPlus = neighborUidPlus;
         this.neighborUidMinus = neighborUidMinus;
-
     }
 
     @Override
@@ -68,6 +67,7 @@ public class HSProcess extends Thread{
         if (hsMessages.size() > 2) {
             throw new IllegalArgumentException("Unexpected number of messages received: " + hsMessages);
         }
+
         HSMessage messageFromPrev = getMessageFrom(hsMessages, neighborUidMinus);
         HSMessage messageFromNext = getMessageFrom(hsMessages, neighborUidPlus);
 
@@ -76,6 +76,11 @@ public class HSProcess extends Thread{
         Long uid = state.getUid();
         Status status = state.getStatus();
         int phase = state.getPhase();
+
+        if (hsMessages.isEmpty()) {
+            state = new HSState(uid, status, phase, null, null);
+            return;
+        }
 
         // Outgoing token from prev
         if (messageFromPrev != null && messageFromPrev.getDirection() == Direction.OUT) {
