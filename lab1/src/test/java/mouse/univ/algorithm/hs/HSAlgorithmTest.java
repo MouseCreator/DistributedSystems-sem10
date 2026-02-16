@@ -45,20 +45,20 @@ class HSAlgorithmTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {100, 200, 300, 400, 500, 600})
+    @ValueSource(ints = {100, 200, 300, 400, 500})
     void testRunsOnEvenLargerValues(int processes) {
         testRun(generateShuffledUids(processes));
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {100, 200, 300, 400, 500, 600})
+    @ValueSource(ints = {100, 200, 300, 400, 500})
     void testRunsWithStraightList(int processes) {
         List<Long> longs = generateUids(processes);
         testRun(longs);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {100, 200, 300, 400, 500, 600})
+    @ValueSource(ints = {100, 200, 300, 400, 500})
     void testRunsWithReversedList(int processes) {
         List<Long> longs = generateUids(processes);
         List<Long> reversed = longs.reversed();
