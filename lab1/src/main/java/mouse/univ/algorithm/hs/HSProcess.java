@@ -55,9 +55,6 @@ public class HSProcess extends Thread{
 
 
     private void sendMessage() {
-        if (state.getUid() == 2) {
-            System.out.println("2");
-        }
         if (state.getSendMinus() != null) {
             controller.send(neighborUidMinus, state.getSendMinus());
         }
@@ -67,9 +64,6 @@ public class HSProcess extends Thread{
     }
 
     private void receiveMessage() {
-        if (state.getUid() == 2) {
-            System.out.println("2");
-        }
         List<HSMessage> hsMessages = controller.receiveMessages(state.getUid());
         if (hsMessages.size() > 2) {
             throw new IllegalArgumentException("Unexpected number of messages received: " + hsMessages);
