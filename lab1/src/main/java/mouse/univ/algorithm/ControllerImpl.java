@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ControllerImpl<T> implements Controller<T> {
 
@@ -19,6 +20,7 @@ public class ControllerImpl<T> implements Controller<T> {
     private final int totalProcesses;
     private final AtomicLong leader;
     private final AtomicInteger roundDecrement;
+    private final AtomicReference<String> errorFlag;
 
     public ControllerImpl(List<Long> uids) {
         recordedMessages = new ConcurrentHashMap<>();
@@ -31,6 +33,7 @@ public class ControllerImpl<T> implements Controller<T> {
         totalRounds = new AtomicInteger(0);
         leader = new AtomicLong(-1L);
         roundDecrement = new AtomicInteger(totalProcesses);
+        errorFlag = new AtomicReference<>("");
     }
 
     @Override
@@ -66,7 +69,21 @@ public class ControllerImpl<T> implements Controller<T> {
 
     @Override
     public void notifyLeaderFound(Long uid) {
+        if (leader.get() != -1) {
+            if (leader.get() != uid) {
+                String prev = errorFlag.get();
+                errorFlag.set(prev + "Cannot elect several leaders at once! Conflict: " + uid + " and " + leader.get() + "\n");
+            }
+        }
         leader.set(uid);
+    }
+
+    public String getError() {
+        String s = errorFlag.get();
+        if (s.isEmpty()) {
+            return null;
+        }
+        return s;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package mouse.univ.algorithm.lcr;
+package mouse.univ.algorithm.hs;
 
 import mouse.univ.algorithm.Algorithm;
 import mouse.univ.algorithm.Output;
@@ -6,13 +6,13 @@ import mouse.univ.algorithm.Output;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LcrAlgorithm implements Algorithm {
+public class HSAlgorithm implements Algorithm {
     private final Integer numberProcesses;
-    private final LcrController controller;
+    private final HSController controller;
     private final List<Long> uids;
     private final Output output;
 
-    public LcrAlgorithm(LcrController controller, List<Long> uids, Output output) {
+    public HSAlgorithm(HSController controller, List<Long> uids, Output output) {
         this.numberProcesses = controller.getMetadata().getProcesses();
         this.controller = controller;
         this.uids = uids;
@@ -20,20 +20,28 @@ public class LcrAlgorithm implements Algorithm {
     }
 
     public void start() {
-        List<LcrProcess> threads = new ArrayList<>();
+        List<HSProcess> threads = new ArrayList<>();
         for (int i = 0; i < numberProcesses; i++) {
-            Long neighbor;
-            if (i == numberProcesses - 1) {
-                neighbor = uids.getFirst();
+            Long prev, next;
+
+            if (i == 0) {
+                prev = uids.getLast();
             } else {
-                neighbor = uids.get(i+1);
+                prev = uids.get(i-1);
             }
-            LcrState state = new LcrState(uids.get(i));
-            LcrProcess process = new LcrProcess(state, neighbor, controller, output);
+
+            if (i == numberProcesses - 1) {
+                next = uids.getFirst();
+            } else {
+                next = uids.get(i+1);
+            }
+
+            HSState state = new HSState(uids.get(i));
+            HSProcess process = new HSProcess(state, prev, next, controller, output);
             process.start();
             threads.add(process);
         }
-        for (LcrProcess thread : threads) {
+        for (HSProcess thread : threads) {
             try {
                 thread.join();
             } catch (InterruptedException e) {

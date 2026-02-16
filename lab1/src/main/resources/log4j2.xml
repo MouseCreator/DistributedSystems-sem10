@@ -7,7 +7,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="off"> <!-- off -->
+        <Root level="all"> <!-- off all -->
             <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>

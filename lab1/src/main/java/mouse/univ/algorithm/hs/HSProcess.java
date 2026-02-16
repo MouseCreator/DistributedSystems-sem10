@@ -55,6 +55,9 @@ public class HSProcess extends Thread{
 
 
     private void sendMessage() {
+        if (state.getUid() == 2) {
+            System.out.println("2");
+        }
         if (state.getSendMinus() != null) {
             controller.send(neighborUidMinus, state.getSendMinus());
         }
@@ -64,6 +67,9 @@ public class HSProcess extends Thread{
     }
 
     private void receiveMessage() {
+        if (state.getUid() == 2) {
+            System.out.println("2");
+        }
         List<HSMessage> hsMessages = controller.receiveMessages(state.getUid());
         if (hsMessages.size() > 2) {
             throw new IllegalArgumentException("Unexpected number of messages received: " + hsMessages);
@@ -77,42 +83,58 @@ public class HSProcess extends Thread{
         Status status = state.getStatus();
         int phase = state.getPhase();
 
-        if (messageFromPrev != null) {
+        // Outgoing token from prev
+        if (messageFromPrev != null && messageFromPrev.getDirection() == Direction.OUT) {
             if (messageFromPrev.getUid() > uid && messageFromPrev.getHopCount() > 1) {
                 sendPlus = new HSMessage(uid, messageFromPrev.getUid(), Direction.OUT ,messageFromPrev.getHopCount() - 1);
             }
-            if (messageFromPrev.getUid() > uid && messageFromPrev.getHopCount() == 1) {
+            else if (messageFromPrev.getUid() > uid && messageFromPrev.getHopCount() == 1) {
                 sendMinus = new HSMessage(uid, messageFromPrev.getUid(), Direction.IN ,1);
             }
-            if (Objects.equals(messageFromPrev.getUid(), uid)) {
+            else if (Objects.equals(messageFromPrev.getUid(), uid)) {
                 status = Status.LEADER;
                 controller.notifyLeaderFound(uid);
             }
         }
-        if (messageFromNext != null) {
+
+        // Outgoing token from next
+        if (messageFromNext != null && messageFromNext.getDirection() == Direction.OUT) {
             if (messageFromNext.getUid() > uid && messageFromNext.getHopCount() > 1) {
                 sendMinus = new HSMessage(uid, messageFromNext.getUid(), Direction.OUT ,messageFromNext.getHopCount() - 1);
             }
-            if (messageFromNext.getUid() > uid && messageFromNext.getHopCount() == 1) {
+            else if (messageFromNext.getUid() > uid && messageFromNext.getHopCount() == 1) {
                 sendPlus = new HSMessage(uid, messageFromNext.getUid(), Direction.IN ,1);
             }
-            if (Objects.equals(messageFromNext.getUid(), uid)) {
+            else if (messageFromNext.getUid().equals(uid)) {
                 status = Status.LEADER;
                 controller.notifyLeaderFound(uid);
             }
         }
+
+        // Message is getting back
         if (messageFromPrev != null
                 && messageFromPrev.getDirection() == Direction.IN
                 && messageFromPrev.getHopCount() == 1
-                && !Objects.equals(messageFromPrev.getUid(), state.getUid())) {
-            sendMinus = new HSMessage(state.getUid(), messageFromPrev.getUid(), Direction.IN, 1);
+                && !Objects.equals(messageFromPrev.getUid(), uid)) {
+            sendPlus = new HSMessage(uid, messageFromPrev.getUid(), Direction.IN, 1);
         }
 
+        // Message is getting back
+        if (messageFromNext != null
+                && messageFromNext.getDirection() == Direction.IN
+                && messageFromNext.getHopCount() == 1
+                && !Objects.equals(messageFromNext.getUid(), uid)) {
+            sendMinus = new HSMessage(uid, messageFromNext.getUid(), Direction.IN, 1);
+        }
+
+        // Receiving own tokens back
         if (messageFromPrev != null && messageFromNext != null
                 && messageFromPrev.getDirection() == Direction.IN && messageFromNext.getDirection() == Direction.IN
-                && messageFromPrev.getHopCount() == 1 && messageFromNext.getHopCount() == 1) {
+                && messageFromPrev.getHopCount() == 1 && messageFromNext.getHopCount() == 1
+                && Objects.equals(messageFromPrev.getUid(), uid) && Objects.equals(messageFromNext.getUid(), uid)) {
             phase = phase + 1;
-            sendMinus = new HSMessage(state.getUid(), messageFromPrev.getUid(), Direction.IN, 1);
+            sendPlus = new HSMessage(uid, uid, Direction.OUT, 1 << phase);
+            sendMinus = new HSMessage(uid, uid, Direction.OUT, 1 << phase);
         }
         state = new HSState(uid, status, phase, sendMinus, sendPlus);
     }

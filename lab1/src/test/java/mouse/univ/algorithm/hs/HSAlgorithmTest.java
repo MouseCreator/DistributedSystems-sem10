@@ -1,4 +1,4 @@
-package mouse.univ.algorithm.lcr;
+package mouse.univ.algorithm.hs;
 
 import mouse.univ.algorithm.AlgorithmMetadata;
 import mouse.univ.algorithm.ConsoleOutput;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LcrAlgorithmTest {
+class HSAlgorithmTest {
 
     private static final Output output = new ConsoleOutput();
 
@@ -36,9 +36,9 @@ class LcrAlgorithmTest {
 
     private void testRun(List<Long> uids) {
         Long maxUid = maxUid(uids);
-
-        LcrController controller = new LcrControllerImpl(uids);
-        LcrAlgorithm algorithm = new LcrAlgorithm(controller, uids, output);
+        System.out.println("Process order:" + uids);
+        HSController controller = new HSControllerImpl(uids);
+        HSAlgorithm algorithm = new HSAlgorithm(controller, uids, output);
         Stopwatch.measure(algorithm::start);
         AlgorithmMetadata metadata = controller.getMetadata();
 
@@ -49,7 +49,7 @@ class LcrAlgorithmTest {
 
     @Test
     void testRunsOnThree() {
-        testRun(generateShuffledUids(3));
+        testRun(List.of(0L,1L,2L));
     }
 
     @Test
@@ -93,5 +93,4 @@ class LcrAlgorithmTest {
         List<Long> hardcoded = List.of(35L);
         testRun(hardcoded);
     }
-
 }
