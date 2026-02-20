@@ -1,11 +1,10 @@
 package mouse.univ.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TreeFactory {
+
+    private final Random random = new Random();
 
     public Tree pairs(List<String> pairs) {
         HashMap<String, TreeNode> nodes = new HashMap<>();
@@ -43,6 +42,28 @@ public class TreeFactory {
             throw new IllegalArgumentException("Tree cannot be empty");
         }
         assertNoCycle(root);
+        return new Tree(root);
+    }
+
+    public Tree ofSize(int treeSize) {
+        int maxChildren = 20;
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        int nodesCreated = 0;
+        TreeNode root = new TreeNode("Node" + nodesCreated++);
+        queue.add(root);
+
+        while (nodesCreated < treeSize) {
+            TreeNode current = queue.removeFirst();
+            int numChildren = random.nextInt((Math.min(maxChildren, treeSize-nodesCreated)));
+            if (queue.isEmpty() && numChildren == 0) {
+                numChildren = 1;
+            }
+            for (int i = 0; i < numChildren; i++) {
+                TreeNode newNode = new TreeNode("Node" + nodesCreated++);
+                current.getNeighbors().add(newNode);
+                queue.add(newNode);
+            }
+        }
         return new Tree(root);
     }
 
