@@ -98,7 +98,7 @@ class MISTreeAlgorithmTest {
     @ValueSource(ints = {100, 1000, 10_000, 100_000, 250_000, 500_000, 1_000_000})
     void findMISList(int size) {
         Tree tree = treeFactory.ofSize(size);
-        Set<String> mis = Stopwatch.measure(() -> misTreeAlgorithm.findMIS(tree));
+        Set<String> mis = Stopwatch.measure(() -> misTreeAlgorithm.findMIS(tree), 10);
         assertTrue(mis.size() < size);
         assertIndependent(tree, mis);
     }
