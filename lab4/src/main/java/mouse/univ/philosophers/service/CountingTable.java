@@ -11,10 +11,9 @@ public class CountingTable implements Table {
     private final Forks forks;
 
     public CountingTable(int N) {
+        semaphore = new Semaphore(N - 1, true);
         if (N == 1) {
-            semaphore = new Semaphore(2, true);
-        } else {
-            semaphore = new Semaphore(N - 1, true);
+            semaphore.release();
         }
         total = N;
         forks = new Forks(N);

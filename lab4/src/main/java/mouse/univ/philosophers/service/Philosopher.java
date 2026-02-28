@@ -17,6 +17,7 @@ public class Philosopher extends Thread {
         this.controller = controller;
     }
 
+    @Override
     public void run() {
         log.info("Philosopher {} started...", id);
         while (controller.active()) {
