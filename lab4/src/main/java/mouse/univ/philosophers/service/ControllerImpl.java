@@ -38,10 +38,7 @@ public class ControllerImpl implements Controller {
 
     @Override
     public void eat(int id) {
-        if (!counts.containsKey(id)) {
-            counts.put(id, 0);
-        }
-        counts.compute(id, (k, prev) -> prev + 1);
+        counts.compute(id, (k, prev) -> prev == null ? 1 : prev + 1);
     }
 
     @Override
