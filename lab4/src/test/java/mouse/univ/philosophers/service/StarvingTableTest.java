@@ -18,7 +18,7 @@ class StarvingTableTest {
         controller.setActive(true);
         Thread.sleep(10_000);
         controller.setActive(false);
-
+        Thread.sleep(10);
         Map<Integer, Integer> counts = controller.getCounts();
         assertEquals(N, counts.size());
         System.out.println("Counts: " + counts);

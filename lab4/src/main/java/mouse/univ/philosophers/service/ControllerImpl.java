@@ -30,7 +30,7 @@ public class ControllerImpl implements Controller {
     @Override
     public void think(int id) {
         try {
-            Thread.sleep(10);
+            Thread.sleep(5);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -39,6 +39,11 @@ public class ControllerImpl implements Controller {
     @Override
     public void eat(int id) {
         counts.compute(id, (k, prev) -> prev == null ? 1 : prev + 1);
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
