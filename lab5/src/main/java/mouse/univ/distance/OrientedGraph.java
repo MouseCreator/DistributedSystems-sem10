@@ -1,39 +1,49 @@
 package mouse.univ.distance;
 
-import lombok.Data;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class OrientedGraph {
 
-    private final HashMap<String, Vertex> vertices;
+    private final List<Vertex> vertices;
+
+    private final HashMap<Integer, List<OrientedEdge>> out;
+    private final HashMap<Integer, List<OrientedEdge>> in;
 
     public OrientedGraph() {
-        this.vertices = new HashMap<>();
+        vertices = new ArrayList<>();
+        out = new HashMap<>();
+        in = new HashMap<>();
+    }
+
+    public List<Vertex> allVertices() {
+        return vertices;
     }
 
     public void addVertex(Vertex v) {
-        vertices.put(v.id, v);
+        vertices.add(v);
+        out.put(v.getId(), new ArrayList<>());
+        in.put(v.getId(), new ArrayList<>());
     }
 
-    private Set<Vertex> getVertices() {
-        return new HashSet<>(vertices.values());
+    public void addOrientedEdge(OrientedEdge edge) {
+        Vertex edgeFrom = edge.getFrom();
+        Vertex edgeTo = edge.getTo();
+        try {
+            out.get(edgeFrom.getId()).add(edge);
+            in.get(edgeTo.getId()).add(edge);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Edge contains unknown vertex: " + edge, e);
+        }
     }
 
-    public Vertex getVertex(String startVertexId) {
-        return vertices.get(startVertexId);
+    public List<OrientedEdge> getOut(Vertex v) {
+        return out.get(v.getId());
     }
-    @Data
-    public static class Edge {
-        Vertex to;
-        private int weight;
+    public List<OrientedEdge> getIn(Vertex v) {
+        return in.get(v.getId());
     }
-    @Data
-    public static class Vertex {
-        private String id;
-        private List<Edge> edgeList;
+
+    public OrientedEdge findEdge(int i, int i1) {
+        return out.get(i).stream().filter(o -> o.getTo().getId() == i1).findAny().orElse(null);
     }
 }
