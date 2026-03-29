@@ -38,7 +38,7 @@ public class Minimization {
                 minColor++;
             }
         }
-        if (minColor != current.getColor()) {
+        if (minColor < current.getColor()) {
             coloringState.incrementSuccess();
             current.setColor(minColor);
         }
