@@ -6,20 +6,12 @@ public class ColoredGraph {
 
     private final Set<ColoredVertex> coloredVertices;
 
-    public ColoredGraph() {
-        coloredVertices = new HashSet<>();
-    }
-
     public ColoredGraph(Collection<ColoredVertex> coloredVertices) {
         this.coloredVertices = new HashSet<>(coloredVertices);
     }
 
     public Set<ColoredVertex> getAllVertices() {
         return new HashSet<>(coloredVertices);
-    }
-
-    public void addVertex(ColoredVertex vertex) {
-        coloredVertices.add(vertex);
     }
 
     public Set<ColoredVertex> duplicate() {
