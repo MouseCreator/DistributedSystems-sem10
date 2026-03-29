@@ -1,5 +1,7 @@
 package mouse.univ.distance;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class OrientedGraphFactory {
@@ -64,4 +66,32 @@ public class OrientedGraphFactory {
         return random.nextInt(1, 10);
     }
 
+    public OrientedGraph createMultipathGraph(int length) {
+        OrientedGraph orientedGraph = new OrientedGraph();
+        int last = length - 1;
+        Vertex origin = new Vertex(0);
+        orientedGraph.addVertex(origin);
+        Vertex lastV = new Vertex(last);
+        orientedGraph.addVertex(lastV);
+        Vertex prev = origin;
+
+        List<Vertex> pathEndings = new ArrayList<>();
+        int cycle = 0;
+        for (int i = 1; i < length - 1; i++) {
+            Vertex current = new Vertex(i);
+            orientedGraph.addVertex(current);
+            orientedGraph.addOrientedEdge(new OrientedEdge(prev, current, weight()));
+            cycle++;
+            if (cycle == 10 || i == length - 2) {
+                pathEndings.add(current);
+                prev = origin;
+            } else {
+                prev = current;
+            }
+        }
+        for (Vertex ending : pathEndings) {
+            orientedGraph.addOrientedEdge(new OrientedEdge(ending, lastV, weight()));
+        }
+        return orientedGraph;
+    }
 }

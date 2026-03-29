@@ -61,6 +61,39 @@ class ShortestPathFinderTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {20, 50, 100, 250, 500})
+    void findShortestPathMultipathGraph(int length) {
+        OrientedGraph orientedGraph = factory.createMultipathGraph(length);
+        HashMap<Integer, Integer> shortestPath = finder.findShortestPath(orientedGraph, 0);
+        assertEquals(0, shortestPath.get(0));
+        List<Integer> sumPaths = sumOfPaths(orientedGraph);
+        assertNotEquals(-1, shortestPath.get(length-1));
+        assertEquals(sumPaths.stream().mapToInt(i->i).min().orElse(-1), shortestPath.get(length-1));
+    }
+
+    private List<Integer> sumOfPaths(OrientedGraph orientedGraph) {
+        List<Integer> sums = new ArrayList<>();
+        List<OrientedEdge> origins = orientedGraph.getOut(new Vertex(0));
+        for (OrientedEdge origin : origins) {
+            Vertex current = origin.getTo();
+            int sum = origin.getWeight();
+            System.out.println(">" + origin.getFrom().getId() + " --- " + origin.getTo().getId() + " > " + origin.getWeight());
+            while (true) {
+                List<OrientedEdge> out = orientedGraph.getOut(current);
+                if (out.isEmpty()) {
+                    break;
+                }
+                OrientedEdge edge = out.getFirst();
+                System.out.println(">" + edge.getFrom().getId() + " --- " + edge.getTo().getId() + " > " + edge.getWeight());
+                sum += edge.getWeight();
+                current = edge.getTo();
+            }
+            sums.add(sum);
+        }
+        return sums;
+    }
+
     private Set<Vertex> findReachable(OrientedGraph orientedGraph) {
         Set<Vertex> visited = new HashSet<>();
         Queue<Vertex> queue = new ArrayDeque<>();
