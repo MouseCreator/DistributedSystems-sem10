@@ -1,11 +1,14 @@
 package mouse.univ.color;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+@Log4j2
 public class RandomLocalMinimizationColoring implements Coloring {
 
     private final int numWorkers;
@@ -30,9 +33,9 @@ public class RandomLocalMinimizationColoring implements Coloring {
         Set<ColoredVertex> all = coloredGraph.duplicate();
         ColoringState coloringState = new ColoringState(maxIterations, numWorkers, all);
 
-        Runnable work = () -> coloringWorker(coloringState);
         List<Thread> workers = new ArrayList<>();
         for (int i = 0; i < numWorkers; i++) {
+            Runnable work = () -> coloringWorker(coloringState);
             Thread worker = new Thread(work);
             workers.add(worker);
         }
@@ -44,6 +47,8 @@ public class RandomLocalMinimizationColoring implements Coloring {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        log.info("Total successful minimizations: {}", coloringState.successfulMins.get());
+        log.info("Total minimizations: {}", coloringState.totalMins.get());
         return new ColoredGraph(all);
     }
 

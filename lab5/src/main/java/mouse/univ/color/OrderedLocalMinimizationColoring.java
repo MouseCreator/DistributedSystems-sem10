@@ -44,6 +44,8 @@ public class OrderedLocalMinimizationColoring implements Coloring {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        log.info("Total successful minimizations: {}", coloringState.successfulMins.get());
+        log.info("Total minimizations: {}", coloringState.totalMins.get());
         return new ColoredGraph(all);
     }
 
