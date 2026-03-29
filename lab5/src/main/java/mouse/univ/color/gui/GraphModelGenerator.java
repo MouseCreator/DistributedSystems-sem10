@@ -19,10 +19,14 @@ public class GraphModelGenerator {
     private final double ALLOCATION_CHANCE = 0.95;
 
     private static class Edge {
+        int id1;
+        int id2;
         Position p1;
         Position p2;
 
-        public Edge(Position p1, Position p2) {
+        public Edge(int id1, int id2, Position p1, Position p2) {
+            this.id1 = id1;
+            this.id2 = id2;
             this.p1 = p1;
             this.p2 = p2;
         }
@@ -60,7 +64,7 @@ public class GraphModelGenerator {
                     if (allocate <= ALLOCATION_CHANCE) {
                         if (canDrawEdge(origin.getId(), target.getId(), positionHashMap, existingEdges)) {
                             origin.addNeighbor(target);
-                            existingEdges.add(new Edge(originPosition, targetPosition));
+                            existingEdges.add(new Edge(i, j, originPosition, targetPosition));
                         }
                     }
                 }
@@ -84,7 +88,11 @@ public class GraphModelGenerator {
                 return false;
             }
         }
+
         for (Edge edge: existingEdges) {
+            if (i == 71 && j == 87 && edge.id1 == 12 && edge.id2 == 39) {
+                System.out.println("!!!");
+            }
             if (Geometry.segmentIntersect(originPosition, targetPosition, edge.p1, edge.p2)) {
                 return false;
             }

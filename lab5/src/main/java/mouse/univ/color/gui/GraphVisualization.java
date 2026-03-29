@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class GraphVisualization {
 
-    public BufferedImage visualize(GraphModel graphModel, ColorMap colorMap) {
+    public BufferedImage visualize(GraphModel graphModel, ColorMap colorMap, boolean displayIds) {
         BufferedImage image = new BufferedImage(graphModel.getWidth(), graphModel.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2 = image.createGraphics();
@@ -43,6 +43,20 @@ public class GraphVisualization {
                         radius * 2,
                         radius * 2
                 );
+                if (displayIds) {
+                    g2.setColor(Color.BLACK);
+
+                    String text = String.valueOf(vertex.getId());
+                    FontMetrics fm = g2.getFontMetrics();
+
+                    int textWidth = fm.stringWidth(text);
+                    int textHeight = fm.getAscent();
+
+                    int textX = position.getX() - textWidth / 2;
+                    int textY = position.getY() + textHeight / 2;
+
+                    g2.drawString(text, textX, textY);
+                }
             }
         } finally {
             g2.dispose();

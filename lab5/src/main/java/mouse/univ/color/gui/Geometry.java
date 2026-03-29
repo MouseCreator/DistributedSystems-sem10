@@ -60,7 +60,10 @@ public class Geometry {
         double interceptX = (l1.b * l2.c - l2.b * l1.c) / denominator;
         double interceptY = (l1.c * l2.a - l2.c * l1.a) / denominator;
 
-        return withinSegment(interceptX, interceptY, a1, a2) && withinSegment(interceptX, interceptY, b1, b2);
+        boolean withinA = withinSegment(interceptX, interceptY, a1, a2);
+        boolean withinB = withinSegment(interceptX, interceptY, b1, b2);
+
+        return withinA && withinB;
     }
 
     private static boolean withinSegment(double interceptX, double interceptY, Position s1, Position s2) {
@@ -74,6 +77,6 @@ public class Geometry {
     }
 
     private static boolean withinCoordsUnstrict(int low, double target, int high) {
-        return target - low > 0.5 && high - target > 0.5;
+        return target - low > 0.25 && high - target > 0.25;
     }
 }
