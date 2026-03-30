@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -91,6 +92,7 @@ public class OrderedLocalMinimizationColoring implements Coloring {
         private AtomicInteger successfulMins;
         private AtomicInteger totalMins;
         private CountDownLatch latch;
+        private Semaphore semaphore;
 
         public ColoringState(int workers, Set<ColoredVertex> vertices) {
             this.barrier = new CyclicBarrier(workers);
@@ -107,6 +109,7 @@ public class OrderedLocalMinimizationColoring implements Coloring {
             successfulMins = new AtomicInteger(0);
             totalMins = new AtomicInteger(0);
             latch = new CountDownLatch(workers);
+            semaphore = new Semaphore(1, true);
         }
         private boolean isDone() {
             return changesLastIteration.get() == 0;
@@ -125,6 +128,11 @@ public class OrderedLocalMinimizationColoring implements Coloring {
         @Override
         public void incrementTotal() {
             totalMins.incrementAndGet();
+        }
+
+        @Override
+        public Semaphore semaphore() {
+            return semaphore;
         }
     }
 }

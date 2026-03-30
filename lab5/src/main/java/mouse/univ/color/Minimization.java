@@ -12,6 +12,11 @@ public class Minimization {
         int id = current.getId();
         Lock currentLock = coloringState.getLocks().get(id);
         currentLock.lock();
+        try {
+            coloringState.semaphore().acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         List<Lock> acquired = new ArrayList<>();
         acquired.add(currentLock);
         boolean success = true;
@@ -26,6 +31,7 @@ public class Minimization {
                 break;
             }
         }
+        coloringState.semaphore().release();
         if (!success) {
             return false;
         }
