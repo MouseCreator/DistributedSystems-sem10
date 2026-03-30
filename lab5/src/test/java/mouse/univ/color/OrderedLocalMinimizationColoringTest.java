@@ -68,4 +68,28 @@ class OrderedLocalMinimizationColoringTest {
         System.out.println("Theoretical max: " + theoreticalMax);
         assertTrue(maxColor <= theoreticalMax);
     }
+
+    @Test
+    void minimizeLineGraph() {
+        int nodes = 100;
+        ColoredGraphGenerator graphGenerator = new ColoredGraphGenerator(123, 0.5);
+        ColoredGraph generated = graphGenerator.generateLine(nodes);
+        OrderedLocalMinimizationColoring orderedLocalMinimizationColoring = new OrderedLocalMinimizationColoring(5);
+        ColoredGraph minimized = orderedLocalMinimizationColoring.minimize(generated);
+        int maxColor = minimized.maxColor();
+        System.out.println("Max color: " + maxColor);
+        assertEquals(1, maxColor);
+    }
+
+    @Test
+    void minimizeStarGraph() {
+        int nodes = 100;
+        ColoredGraphGenerator graphGenerator = new ColoredGraphGenerator(123, 0.5);
+        ColoredGraph generated = graphGenerator.generateStar(nodes);
+        OrderedLocalMinimizationColoring orderedLocalMinimizationColoring = new OrderedLocalMinimizationColoring(5);
+        ColoredGraph minimized = orderedLocalMinimizationColoring.minimize(generated);
+        int maxColor = minimized.maxColor();
+        System.out.println("Max color: " + maxColor);
+        assertEquals(1, maxColor);
+    }
 }

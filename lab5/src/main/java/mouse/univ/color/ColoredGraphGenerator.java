@@ -56,4 +56,29 @@ public class ColoredGraphGenerator {
 
         return new ColoredGraph(coloredVertexList);
     }
+
+    public ColoredGraph generateLine(int nodes) {
+        List<ColoredVertex> coloredVertexList = new ArrayList<>();
+        ColoredVertex prev = new ColoredVertex(0, 0);
+        coloredVertexList.add(prev);
+        for (int i = 0; i < nodes; i++) {
+            ColoredVertex v = new ColoredVertex(i, i);
+            v.addNeighbor(prev);
+            coloredVertexList.add(v);
+            prev = v;
+        }
+        return new ColoredGraph(coloredVertexList);
+    }
+
+    public ColoredGraph generateStar(int nodes) {
+        List<ColoredVertex> coloredVertexList = new ArrayList<>();
+        ColoredVertex first = new ColoredVertex(0, 0);
+        coloredVertexList.add(first);
+        for (int i = 1; i < nodes; i++) {
+            ColoredVertex v = new ColoredVertex(i, i);
+            v.addNeighbor(first);
+            coloredVertexList.add(v);
+        }
+        return new ColoredGraph(coloredVertexList);
+    }
 }
