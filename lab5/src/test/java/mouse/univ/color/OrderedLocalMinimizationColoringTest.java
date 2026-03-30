@@ -24,6 +24,7 @@ class OrderedLocalMinimizationColoringTest {
             maxColor = Math.max(v.getColor(), maxColor);
         }
         assertEquals(nodes - 1, maxColor);
+        Util.assertCorrectColors(minimized);
     }
 
     @Test
@@ -37,6 +38,7 @@ class OrderedLocalMinimizationColoringTest {
         for (ColoredVertex v : allVertices) {
             assertEquals(0, v.getColor());
         }
+        Util.assertCorrectColors(minimized);
     }
 
     @ParameterizedTest
@@ -52,6 +54,7 @@ class OrderedLocalMinimizationColoringTest {
         System.out.println("Max color: " + maxColor);
         System.out.println("Theoretical max: " + theoreticalMax);
         assertTrue(maxColor <= theoreticalMax);
+        Util.assertCorrectColors(minimized);
     }
 
     @Test
@@ -67,6 +70,7 @@ class OrderedLocalMinimizationColoringTest {
         System.out.println("Max color: " + maxColor);
         System.out.println("Theoretical max: " + theoreticalMax);
         assertTrue(maxColor <= theoreticalMax);
+        Util.assertCorrectColors(minimized);
     }
 
     @Test
@@ -79,6 +83,7 @@ class OrderedLocalMinimizationColoringTest {
         int maxColor = minimized.maxColor();
         System.out.println("Max color: " + maxColor);
         assertEquals(1, maxColor);
+        Util.assertCorrectColors(minimized);
     }
 
     @Test
@@ -91,5 +96,6 @@ class OrderedLocalMinimizationColoringTest {
         int maxColor = minimized.maxColor();
         System.out.println("Max color: " + maxColor);
         assertEquals(1, maxColor);
+        Util.assertCorrectColors(minimized);
     }
 }

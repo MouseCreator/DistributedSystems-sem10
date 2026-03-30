@@ -61,7 +61,7 @@ public class ColoredGraphGenerator {
         List<ColoredVertex> coloredVertexList = new ArrayList<>();
         ColoredVertex prev = new ColoredVertex(0, 0);
         coloredVertexList.add(prev);
-        for (int i = 0; i < nodes; i++) {
+        for (int i = 1; i < nodes; i++) {
             ColoredVertex v = new ColoredVertex(i, i);
             v.addNeighbor(prev);
             coloredVertexList.add(v);
