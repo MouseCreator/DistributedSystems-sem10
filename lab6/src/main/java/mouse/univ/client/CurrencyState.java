@@ -20,20 +20,21 @@ public class CurrencyState {
         clients = new ConcurrentHashMap<>();
     }
 
-    public void process(Event message) {
+    public boolean process(Event message) {
         if (message instanceof RegisterEvent re) {
             clients.put(re.getName(), new ClientInfo(re.getName(), re.getPublicKey()));
-            return;
+            return true;
         }
         String senderSignature = message.getSenderSignature();
         ClientSignature signature = new RsaSignature();
         boolean b = signature.checkSignature(message.getUuid(), senderSignature, clients.get(message.getSender()).getPublicKey());
         if (!b) {
-            throw new RuntimeException("Unverified message received:" + message);
+            return false;
         }
         if (message instanceof ContractEvent ce) {
             HashTimeLockContract contract = ce.getContract();
             contracts.put(contract.getUuid(), contract);
         }
+        return true;
     }
 }

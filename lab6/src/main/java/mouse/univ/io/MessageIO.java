@@ -21,14 +21,12 @@ public class MessageIO {
     private final List<Peer> peers;
     private final List<ServerSocket> serverSockets;
     private final BlockingQueue<Event> incoming;
-    private final List<Thread> listenerThreads;
     @Getter
     private final CurrencyState currencyState;
     public MessageIO(int index) {
         try {
         peers = new ArrayList<>();
         currencyState = new CurrencyState();
-        listenerThreads = new ArrayList<>();
         serverSockets = new ArrayList<>();
         incoming = new LinkedBlockingQueue<>();
 
@@ -102,7 +100,6 @@ public class MessageIO {
             Thread listenerThread = new Thread(() -> listenOnSocket(serverSocket));
             listenerThread.setDaemon(true);
             listenerThread.start();
-            listenerThreads.add(listenerThread);
         }
     }
     private void listenOnSocket(ServerSocket serverSocket) {
@@ -110,8 +107,9 @@ public class MessageIO {
              ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
             while (!Thread.currentThread().isInterrupted()) {
                 Object message = input.readObject();
-                currencyState.process((Event) message);
-                incoming.put((Event) message);
+                if(currencyState.process((Event) message)) {
+                    incoming.put((Event) message);
+                }
             }
         } catch (EOFException ignored) {
         } catch (IOException | ClassNotFoundException e) {
