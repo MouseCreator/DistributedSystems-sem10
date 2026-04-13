@@ -17,7 +17,7 @@ public class Case2CancelTest {
             processes.add(Utils.startProcess(PKG_NAME, "Alice", "0"));
             processes.add(Utils.startProcess(PKG_NAME, "Bob", "1"));
             processes.add(Utils.startProcess(PKG_NAME, "Carl", "2"));
-            Thread.sleep(12000);
+            Thread.sleep(10000);
         } finally {
             for (Process p : processes) {
                 p.destroy();

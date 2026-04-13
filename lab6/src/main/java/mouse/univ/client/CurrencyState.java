@@ -3,7 +3,7 @@ package mouse.univ.client;
 import lombok.Data;
 import mouse.univ.crypt.ClientSignature;
 import mouse.univ.crypt.RsaSignature;
-import mouse.univ.lock.HashTimeLockContract;
+import mouse.univ.htlc.HashTimeLockContract;
 import mouse.univ.events.ContractEvent;
 import mouse.univ.events.Event;
 import mouse.univ.events.RegisterEvent;

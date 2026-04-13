@@ -1,7 +1,7 @@
 package mouse.univ.events;
 
 import lombok.Data;
-import mouse.univ.lock.HashTimeLockContract;
+import mouse.univ.htlc.HashTimeLockContract;
 
 @Data
 public class ContractEvent extends Event {

@@ -1,4 +1,4 @@
-package mouse.univ.lock;
+package mouse.univ.htlc;
 
 import lombok.Data;
 import mouse.univ.crypt.ClientSignature;
