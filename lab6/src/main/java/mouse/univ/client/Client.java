@@ -25,7 +25,7 @@ public class Client {
         this.name = name;
         this.messageIO = messageIO;
         currencyState = messageIO.getCurrencyState();
-        signature = new RsaSignature();;
+        signature = new RsaSignature();
         keyPair = signature.provideKeyPair();
     }
 
@@ -120,9 +120,7 @@ public class Client {
         messageIO.send(new BarrierEvent(uuid, name, sign(uuid)));
         System.out.println(name + " reached barrier!");
         for (int i = 0; i < 2; i++) {
-            messageIO.awaitEvent(e -> {
-                return e instanceof BarrierEvent;
-            });
+            messageIO.awaitEvent(e -> e instanceof BarrierEvent);
         }
         System.out.println(name + " passed barrier!");
     }
