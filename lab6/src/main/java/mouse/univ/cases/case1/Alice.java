@@ -16,7 +16,7 @@ public class Alice {
         client.register(100);
         System.out.println("Register Alice!");
         client.barrier();
-        HashTimeLockContract aliceBob = client.sendContract(Utils.hashed("12345"), Duration.ofMinutes(1), "Bob", 100);
+        HashTimeLockContract aliceBob = client.sendContract(Utils.hashed("12345"), Duration.ofMinutes(10), "Bob", 100);
         System.out.println("Alice created contract to send money to Bob");
         ContractEvent bobCarl = client.awaitContract("Bob", "Carl");
         ContractEvent carlAlice = client.awaitContract("Carl", "Alice");

@@ -18,7 +18,7 @@ public class Bob {
         client.barrier();
         ContractEvent aliceBob = client.awaitContract("Alice", "Bob");
         System.out.println("Bob received contract from Alice");
-        HashTimeLockContract bobCarl = client.sendContract(aliceBob.getContract().getPublicHash(), Duration.ofSeconds(1), "Carl", 50);
+        HashTimeLockContract bobCarl = client.sendContract(aliceBob.getContract().getPublicHash(), Duration.ofSeconds(3), "Carl", 50);
         System.out.println("Bob sent contract to give money to Carl");
         client.awaitCancel(aliceBob.getUuid());
         client.tryCancel(bobCarl.getUuid());
