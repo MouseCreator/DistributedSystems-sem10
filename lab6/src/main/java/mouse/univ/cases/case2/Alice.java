@@ -20,9 +20,9 @@ public class Alice {
         System.out.println("Alice created contract to send money to Bob");
         boolean b = client.tryCancel(aliceBob.getUuid());
         if (b) {
-            System.out.println("Alice tried to cancel - too early!");
-        } else {
             System.out.println("FAIL! Alice cancelled early!");
+        } else {
+            System.out.println("Alice tried to cancel - too early!");
         }
         ContractEvent bobCarl = client.awaitContract("Bob", "Carl");
         ContractEvent carlAlice = client.awaitContract("Carl", "Alice");
