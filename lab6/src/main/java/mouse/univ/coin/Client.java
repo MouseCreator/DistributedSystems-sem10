@@ -62,6 +62,17 @@ public class Client {
         return false;
     }
 
+    public boolean tryCancel(String uuid) {
+        HashTimeLockContract contract = currencyState.getContracts().get(uuid);
+        String signature = sign(uuid);
+        if (contract.cancel(signature)) {
+            String newUuid = getUuid();
+            messageIO.send(new CancelEvent(newUuid, name, sign(newUuid), uuid));
+            return true;
+        }
+        return false;
+    }
+
     private String sign(String message) {
         return this.signature.sign(keyPair.getPrivate(), message);
     }
