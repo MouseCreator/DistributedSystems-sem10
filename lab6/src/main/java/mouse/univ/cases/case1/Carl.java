@@ -23,13 +23,15 @@ public class Carl {
         UnlockEvent unlockEvent = client.awaitUnlock(carlAlice.getUuid());
         System.out.println("Carl awaited unlock event triggered by Alice");
         String secret = unlockEvent.getX();
+        System.out.println("Carl received secret " + secret);
         boolean b = client.tryUnlock(bobCarl.getUuid(), secret);
         if (b) {
             System.out.println("Carl unlocked contract to receive money from Bob using the key " + secret);
         } else {
             System.out.println("Carl failed to unlock contract");
         }
-        client.awaitUnlock(carlAlice.getUuid());
         System.out.println("Carl done!");
+        client.barrier();
+        messageIO.close();
     }
 }

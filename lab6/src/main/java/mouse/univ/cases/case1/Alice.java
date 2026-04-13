@@ -28,7 +28,8 @@ public class Alice {
         }
         client.awaitUnlock(aliceBob.getUuid());
         client.awaitUnlock(bobCarl.getUuid());
-        messageIO.close();
         System.out.println("Alice done!");
+        client.barrier();
+        messageIO.close();
     }
 }

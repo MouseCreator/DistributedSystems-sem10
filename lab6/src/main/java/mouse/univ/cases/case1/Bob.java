@@ -31,5 +31,7 @@ public class Bob {
             System.out.println("Bob failed to unlock contract!");
         }
         System.out.println("Bob done!");
+        client.barrier();
+        messageIO.close();
     }
 }

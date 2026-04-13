@@ -66,24 +66,10 @@ public class Client {
         return this.signature.sign(keyPair.getPrivate(), message);
     }
 
-    public ContractEvent awaitContractForUs() {
-        Event event = messageIO.awaitEvent(e -> {
-            if (e instanceof ContractEvent c) {
-                if (c.getContract().getReceiverPublicKey().equals(keyPair.getPublic())) {
-                    return true;
-                }
-            }
-            return false;
-        });
-        return (ContractEvent) event;
-    }
-
     public UnlockEvent awaitUnlock(String uuid) {
         Event event = messageIO.awaitEvent(e -> {
             if (e instanceof UnlockEvent u) {
-                if (u.getContractUid().equals(uuid)) {
-                    return true;
-                }
+                return u.getContractUid().equals(uuid);
             }
             return false;
         });
@@ -93,9 +79,7 @@ public class Client {
     public CancelEvent awaitCancel(String uuid) {
         Event event = messageIO.awaitEvent(e -> {
             if (e instanceof CancelEvent u) {
-                if (u.getContractUid().equals(uuid)) {
-                    return true;
-                }
+                return u.getContractUid().equals(uuid);
             }
             return false;
         });
@@ -110,11 +94,9 @@ public class Client {
         PublicKey pc1 = currencyState.getClients().get(sender).getPublicKey();
         PublicKey pc2 = currencyState.getClients().get(receiver).getPublicKey();
         Event event = messageIO.awaitEvent(e -> {
-            System.out.println("<<< " + e.getClass().getSimpleName());
+            // System.out.println("<<< " + e.getClass().getSimpleName());
             if (e instanceof ContractEvent u) {
-                if (u.getContract().getSenderPublicKey().equals(pc1) && u.getContract().getReceiverPublicKey().equals(pc2)) {
-                    return true;
-                }
+                return u.getContract().getSenderPublicKey().equals(pc1) && u.getContract().getReceiverPublicKey().equals(pc2);
             }
             return false;
         });
@@ -127,11 +109,7 @@ public class Client {
         System.out.println(name + " reached barrier!");
         for (int i = 0; i < 2; i++) {
             messageIO.awaitEvent(e -> {
-                if (e instanceof BarrierEvent be) {
-                    System.out.println(be.getSender() + " joins " + name + " at the barrier!");
-                    return true;
-                }
-                return false;
+                return e instanceof BarrierEvent;
             });
         }
         System.out.println(name + " passed barrier!");
