@@ -2,14 +2,11 @@ package mouse.univ.lock;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Transaction {
-    private String uuid;
+public class Transaction implements Serializable {
     private String sender;
     private String receiver;
     private int amount;
-
-    public String head() {
-        return uuid + ";" + amount + ";" + sender + ";" + receiver;
-    }
 }

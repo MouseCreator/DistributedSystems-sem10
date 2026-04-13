@@ -1,7 +1,7 @@
-package mouse.univ.hash;
+package mouse.univ.crypt;
 
+import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.spec.*;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.util.Base64;
@@ -12,7 +12,15 @@ public class RsaSignature implements ClientSignature {
 
     @Override
     public String sign(PrivateKey privateKey, String value) {
-        return "";
+        try {
+            Signature signer = Signature.getInstance(ALGORITHM);
+            signer.initSign(privateKey);
+            signer.update(value.getBytes(StandardCharsets.UTF_8));
+            byte[] signatureBytes = signer.sign();
+            return Base64.getEncoder().encodeToString(signatureBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("Signature creation failed", e);
+        }
     }
 
     @Override
@@ -31,10 +39,9 @@ public class RsaSignature implements ClientSignature {
     public boolean checkSignature(String message, String signature, PublicKey publicKey) {
         try {
             byte[] signatureBytes = Base64.getDecoder().decode(signature);
-            byte[] messageBytes = Base64.getDecoder().decode(message);
             Signature verifier = Signature.getInstance(ALGORITHM);
             verifier.initVerify(publicKey);
-            verifier.update(messageBytes);
+            verifier.update(message.getBytes(StandardCharsets.UTF_8));
             return verifier.verify(signatureBytes);
         } catch (Exception e) {
             throw new RuntimeException("Signature verification failed", e);

@@ -1,37 +1,32 @@
 package mouse.univ.lock;
 
 import lombok.Data;
-import mouse.univ.coin.Client;
-import mouse.univ.hash.ClientSignature;
-import mouse.univ.hash.HashFunction;
-import mouse.univ.transaction.UnlockEvent;
+import mouse.univ.crypt.ClientSignature;
+import mouse.univ.crypt.HashFunction;
+import mouse.univ.crypt.RsaSignature;
+import mouse.univ.crypt.SHA256;
 
+import java.io.Serializable;
 import java.security.PublicKey;
 import java.time.LocalDateTime;
 
 @Data
-public class HashTimeLockContract {
+public class HashTimeLockContract implements Serializable {
+    private String uuid;
     private PublicKey receiverPublicKey;
     private PublicKey senderPublicKey;
-    private HashFunction hashFunction;
-    private ClientSignature signature;
     private String publicHash;
     private Transaction transaction;
     private LocalDateTime timeout;
-    private Client client;
 
-    public boolean lock() {
-
+    public boolean unlock(String key, String recvSig) {
+        HashFunction hashFunction = new SHA256();
+        ClientSignature signature = new RsaSignature();
+        return (hashFunction.hash(key).equals(publicHash) && signature.checkSignature(uuid, recvSig, receiverPublicKey));
     }
 
-    public boolean unlock(String key, String aliceSignature) {
-        boolean success = (hashFunction.hash(key).equals(publicHash) && signature.checkSignature(transaction.head(), aliceSignature, receiverPublicKey));
-        if (success) {
-            client.send(new UnlockEvent(transaction, key));
-        }
-    }
-
-    public boolean cancel(String bobSignature) {
-        return LocalDateTime.now().isAfter(timeout) && signature.checkSignature(transaction.head(), bobSignature, senderPublicKey);
+    public boolean cancel(String sendSig) {
+        ClientSignature signature = new RsaSignature();
+        return LocalDateTime.now().isAfter(timeout) && signature.checkSignature(uuid, sendSig, senderPublicKey);
     }
 }
