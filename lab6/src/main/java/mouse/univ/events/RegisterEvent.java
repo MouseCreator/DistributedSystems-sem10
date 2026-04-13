@@ -1,7 +1,5 @@
 package mouse.univ.events;
 
-
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

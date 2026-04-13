@@ -1,9 +1,8 @@
 package mouse.univ.cases.case1;
 
-import mouse.univ.coin.Client;
-import mouse.univ.coin.Utils;
+import mouse.univ.client.Client;
+import mouse.univ.io.Utils;
 import mouse.univ.io.MessageIO;
-import mouse.univ.lock.HashTimeLockContract;
 import mouse.univ.events.ContractEvent;
 import mouse.univ.events.UnlockEvent;
 

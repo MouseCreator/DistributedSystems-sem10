@@ -1,4 +1,4 @@
-package mouse.univ.coin;
+package mouse.univ.kill;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

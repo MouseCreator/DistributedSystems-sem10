@@ -1,4 +1,4 @@
-package mouse.univ.coin;
+package mouse.univ.client;
 
 import mouse.univ.events.Event;
 

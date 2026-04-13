@@ -1,9 +1,8 @@
 package mouse.univ.cases.case2;
 
-import mouse.univ.coin.Client;
-import mouse.univ.coin.Utils;
+import mouse.univ.client.Client;
+import mouse.univ.io.Utils;
 import mouse.univ.events.ContractEvent;
-import mouse.univ.events.UnlockEvent;
 import mouse.univ.io.MessageIO;
 import mouse.univ.lock.HashTimeLockContract;
 
@@ -21,7 +20,12 @@ public class Bob {
         HashTimeLockContract bobCarl = client.sendContract(aliceBob.getContract().getPublicHash(), Duration.ofSeconds(3), "Carl", 50);
         System.out.println("Bob sent contract to give money to Carl");
         client.awaitCancel(aliceBob.getUuid());
-        client.tryCancel(bobCarl.getUuid());
+        boolean b = client.tryCancel(bobCarl.getUuid());
+        if (b) {
+            System.out.println("Bob cancelled contract with Carl");
+        } else {
+            System.out.println("Bob failed to cancel contract");
+        }
         System.out.println("Bob done!");
         client.barrier();
         messageIO.close();

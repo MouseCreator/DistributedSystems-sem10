@@ -1,6 +1,6 @@
-package mouse.univ.cases.case1;
+package mouse.univ;
 
-import mouse.univ.coin.Utils;
+import mouse.univ.io.Utils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

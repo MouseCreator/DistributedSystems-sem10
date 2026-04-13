@@ -1,7 +1,7 @@
 package mouse.univ.io;
 
 import lombok.Getter;
-import mouse.univ.coin.CurrencyState;
+import mouse.univ.client.CurrencyState;
 import mouse.univ.events.Event;
 
 import java.io.EOFException;

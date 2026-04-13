@@ -1,4 +1,4 @@
-package mouse.univ.coin;
+package mouse.univ.client;
 
 import lombok.Data;
 import mouse.univ.crypt.ClientSignature;

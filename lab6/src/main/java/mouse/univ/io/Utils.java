@@ -1,4 +1,4 @@
-package mouse.univ.coin;
+package mouse.univ.io;
 
 import mouse.univ.crypt.HashFunction;
 import mouse.univ.crypt.SHA256;
